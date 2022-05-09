@@ -1,0 +1,95 @@
+<!DOCTYPE html/>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Matching game</title>
+        <style>
+          img{
+              position:absolute;
+            }  
+           div{
+               position:absolute;
+               width: 500px;
+               height: 500px;
+           } 
+           #rightSide{
+               left: 500px;
+               border-left: 1px solid;
+           }
+           body{
+               background-color: brown;
+               font-size: 150%;
+           }
+           .utility{
+               color: aliceblue;
+               font-size: 120%;
+               text-align:center ;
+           }
+        </style>
+    </head>
+    <body onload="generateFaces()">
+        <h1 class="utility">Matching game</h1>
+        <p class="utility">Click on the extra face on the left</p>
+        <div id="leftSide"></div>
+        <div id="rightSide"></div>
+
+
+        <script>
+            let numberOfFaces=5
+            const theLeftSide=document.getElementById("leftSide")
+            const theRightSide = document.getElementById("rightSide")
+            function generateFaces(){
+                    for (let i=0; i < numberOfFaces; i++){
+                        let face=document.createElement("img")
+                        face.src = 'https://learn.nucamp.co/pluginfile.php/619/mod_assign/intro/smile.png'  
+                        let randomTop=Math.floor(Math.random()*400)+1
+                        let randomLeft=Math.floor(Math.random()*400)+1
+                        face.style.top = randomTop + 'px'
+                        face.style.left=randomLeft + 'px'
+                        theLeftSide.appendChild(face)
+                    }
+                    const leftImages=theLeftSide.cloneNode(true)
+                    //remove one smiley face on the right side
+                    leftImages.removeChild(leftImages.lastChild) 
+                    //append the left side image to the right side
+                    theRightSide.appendChild(leftImages) 
+
+                    //add event handler to make sure that when the extra face on the right is clicked,
+                    //it will go to the next level
+                    let gameBody=document.getElementsByTagName("body")[0]
+                    theLeftSide.lastChild.onclick=function nextLevel() {
+                        //will not allow changes to be applied to other element in the webpage
+                        event.stopPropagation()
+                        //generate extra faces
+                        numberOfFaces += 5
+    
+                        while (theLeftSide.firstChild){
+                            theLeftSide.removeChild(theLeftSide.firstChild)
+                        }
+                        while (theRightSide.firstChild){
+                            theRightSide.removeChild(theRightSide.firstChild)
+                        }
+                        generateFaces()
+                    }
+                    gameBody.onclick=function gameover(){
+                        alert("game over")
+                        gameBody.onclick=null
+                        theLeftSide.lastChild.onclick - null
+                        while(theLeftSide.firstChild){
+                            theLeftSide.removeChild(theLeftSide.firstChild)
+                        }
+                        while(theRightSide.firstChild){
+                            theRightSide.removeChild(theRightSide.firstChild)
+                        }
+                        numberOfFaces = 5
+                        generateFaces()
+                    }
+
+
+                }
+                generateFaces()
+                    
+            
+        </script>
+    </body>
+</html>
